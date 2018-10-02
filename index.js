@@ -484,3 +484,105 @@ function maxValue(myArray){
 const returnMaxValue=maxValue(maxArray);
 console.log(returnMaxValue);
 console.log(maxValue([]));
+
+
+console.log('----Ex- movies----');
+
+const movies=[
+    {title:'a',year:2018,rating:4.5},
+    {title:'b',year:2018,rating:4.7},
+    {title:'c',year:2018,rating:3},
+    {title:'d',year:2017,rating:4.5},
+];
+
+function filterMovies(movies){
+    return movies
+    .filter((item)=> item.year===2018 && item.rating>4)
+    .sort((a,b)=>{
+        if(a.rating<b.rating){  return 1; }
+        if(a.rating>b.rating){  return -1;}
+        // console.log(a,b, '=');
+        return 0;
+    })
+    .map((item)=>{
+        return item.title;
+    });
+    // return movies;
+}
+
+let myMovies=filterMovies(movies);
+
+console.log(myMovies);
+
+console.log('----Rest operator in JS----');
+
+function sum(discount,...prices){
+    let total=prices.reduce((prevVal,currentVal)=>{return prevVal+=currentVal},0);
+    return total*(1-discount);
+}
+
+console.log(sum(0.5,20,30));
+
+console.log('----getter and setter in JS----');
+
+person={
+    firstname:'Manish',
+    lastname:'Kumar',
+    get fullname(){
+        return `${this.firstname} ${this.lastname}` 
+    },
+    set fullname(value){
+        const parts=value.split(' ');
+        this.firstname=parts[0];
+        this.lastname=parts[1];
+    }
+};
+
+person.fullname='another name';
+
+console.log(person.fullname);
+
+console.log('----Playing with this variable----');
+
+const myMoviewVariable={
+    title:'Lagaan',
+    year:2001,
+    tags:['cricket','aamir','british'],
+    printAlltags(){
+        this.tags.forEach(tag=>{console.log(this.title,tag)});
+    }
+};
+
+myMoviewVariable.printAlltags();
+
+console.log('----Sum function with unlimited arguments----');
+
+function sum(...args){
+    // console.log(args);
+
+    if(args.length===1 && Array.isArray(args[0]))
+        args=args[0];
+    // if(Array.isArray(args)){
+        return args.reduce((previousValue,currentValue)=>{
+            return previousValue+=currentValue;
+        },0)
+    // }
+    // else{
+
+    // }
+}
+
+console.log(sum(1,2,3,4,5,6));
+
+console.log(sum([1,2,3,4,5,6]));
+
+console.log('----Ex- Area of a circle----');
+
+const circleForRadius={
+    radius:1,
+    get area(){
+        return Math.PI*(this.radius**2);
+    }
+};
+
+console.log(circleForRadius.area);
