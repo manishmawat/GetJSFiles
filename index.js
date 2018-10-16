@@ -586,3 +586,210 @@ const circleForRadius={
 };
 
 console.log(circleForRadius.area);
+
+
+console.log('-----------Stop watch problem----------------');
+
+function StopWatch(){
+    let duration=0;
+
+    let startTime;
+    let endTime;
+
+    let isStarted=false;
+
+    // this.start = function(){
+    //     if(isStarted)
+    //         return new Error('Invalid action');
+    //     isStarted=true;
+    //     startTime=new Date();
+    // }
+
+    // this.stop= function(){
+    //     if(!this.isStarted){
+    //         return new Error('Invalid action');
+    //     }
+    //     this.isStarted=false;
+    //     this.endTime=new Date();
+
+    //     let val=(this.endTime.getTime()-this.startTime.getTime())/1000;
+    //     this.duration=val;
+    // }
+
+    this.reset=function(){
+        startTime=null;
+        endTime=null;
+        isStarted=false;
+        duration=0;
+    }
+
+    Object.defineProperty(this,"duration",{
+        get: function(){
+            return duration;
+        }
+    })
+}
+
+const sw=new StopWatch();
+
+console.log('----Prototype--Move the stopwatch functions to the base object--');
+
+StopWatch.prototype.start=function(){
+        if(this.isStarted)
+            return new Error('Invalid action');
+        this.isStarted=true;
+        this.startTime=new Date();
+}
+
+StopWatch.prototype.stop=function(){
+    if(!this.isStarted){
+        return new Error('Invalid action');
+    }
+    this.isStarted=false;
+    this.endTime=new Date();
+
+    let val=(this.endTime.getTime()-this.startTime.getTime())/1000;
+    duration=val;
+}
+
+StopWatch.prototype.reset=function(){
+    this.startTime=null;
+        this.endTime=null;
+        this.isStarted=false;
+        duration=0;
+}
+
+StopWatch.prototype.duration=0;
+console.log(sw.duration);
+
+console.log('---------------JS Inheritance using prototying----------------');
+
+function Element1(){
+    this.focus=function(){
+        console.log('focus');
+    }
+}
+
+function HTMLElement1(){
+    this.click=function(){
+        console.log('clicked');
+    }
+}
+
+HTMLElement1.prototype=Object.create(Element1.prototype);
+HTMLElement1.prototype.constructor=HTMLElement1;
+
+let h=new HTMLElement1();
+console.log(h);
+
+HTMLElement1.prototype.focus=function(){
+    console.log('focused');
+}
+
+function HtmlSelectElement(item=[]){
+    this.items=item;
+
+    this.addItem=function(item){
+        this.items.push(item);
+    }
+
+    this.removeItem=function(item){
+        this.items.splice(this.items.indexOf(item),1);
+    }
+
+    this.render=function(){
+        let itemArray=[];
+        itemArray.push('<select>');
+        for(let item of this.items)
+        {
+            itemArray.push(`<option>"${item}"</option>`);
+        }
+        itemArray.push('</select>');
+        return itemArray.join('\n');
+    }
+}
+
+// function extend(Child,Parent){
+//     Child.prototype=Object.create(Parent);
+//     Child.prototype.constructor=Child;
+// }
+
+HtmlSelectElement.prototype=new HTMLElement1();
+
+// extend(HtmlSelectElement,HTMLElement1);
+
+// console.log(h.click());
+
+console.log('------- JS Polymorphism --------');
+
+// HtmlSelectElement.render=function(){
+//     let itemArray=[];
+//     itemArray.push('<select>');
+//     for(let item of this.items)
+//     {
+//         itemArray.push(`<option>"${item.value}"</option>`);
+//     }
+//     itemArray.push('</select>');
+//     return itemArray.join('\n');
+// }
+
+function HTMLImageElement1(src=''){
+    this.src=src;
+    this.render=function(){
+        return `<img src="${this.src}" />`;
+    }
+}
+
+HTMLImageElement1.prototype=new HtmlSelectElement();
+HTMLImageElement1.prototype.constructor=HTMLImageElement1;
+
+// HTMLImageElement1.render=function(){
+//     return `<img src=${this.src} />`;
+// }
+
+const inputArray=
+[
+    new HtmlSelectElement([2,3,4]),
+    new HTMLImageElement1('https\\mypic')
+];
+
+for(let x of inputArray)
+{
+    console.log(x.render());
+}
+
+
+console.log('----------- ES6 classes + inheritance + private + method override-------');
+
+const _stackItems=new WeakMap();
+class Stack{
+    constructor(){
+        _stackItems.set(this,[]);
+        // this.count=0;
+    }
+    
+    //count
+
+    get count(){
+        return _stackItems.get(this).length;
+    }
+
+
+    //push
+    push(item){
+        _stackItems.get(this).push(item);
+    }
+    //pop
+    pop(){
+        if(this.count===0) throw new Error('stack is empty');
+        return _stackItems.get(this).pop();
+    }
+    //peek
+    peek(){
+        if(this.count===0) throw new Error('stack is empty');
+        return _stackItems.get(this)[this.count-1];
+        // return _stackItems.get(this).peek();//splice(_stackItems.get(this).length-1,0);
+    }
+}
+
+const s=new Stack();
